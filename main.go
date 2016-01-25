@@ -37,7 +37,9 @@ func main() {
 
 	window.SetKeyCallback(onKey)
 
-	player = &model.Player{3, -1, -1}
+	player = &model.Player{3, 1, 1}
+
+	gl.Ortho(0, 40, 0, 30, -1, 3)
 
 	for !window.ShouldClose() {
 		render()
