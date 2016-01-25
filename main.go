@@ -32,6 +32,8 @@ func main() {
 	}
 
 	for !window.ShouldClose() {
+		render()
+
 		window.SwapBuffers()
 		glfw.PollEvents()
 	}
