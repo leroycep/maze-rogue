@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/geemili/maze-rogue/model"
+	"github.com/geemili/maze-rogue/view"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.1/glfw"
 	"runtime"
@@ -10,6 +12,8 @@ import (
 func init() {
 	runtime.LockOSThread()
 }
+
+var player *model.Player
 
 func main() {
 	fmt.Println("Hello, world!")
@@ -31,6 +35,8 @@ func main() {
 		panic(err)
 	}
 
+	player = &model.Player{3, 0, 0}
+
 	for !window.ShouldClose() {
 		render()
 
@@ -43,11 +49,5 @@ func render() {
 	gl.ClearColor(0, 0, 0, 1)
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-	gl.Color4f(1, 0, 0, 1)
-
-	gl.Begin(gl.TRIANGLES)
-	gl.Vertex3f(0, 1, 0)
-	gl.Vertex3f(-1, -1, 0)
-	gl.Vertex3f(1, -1, 0)
-	gl.End()
+	view.RenderPlayer(player)
 }
