@@ -41,5 +41,13 @@ func main() {
 
 func render() {
 	gl.ClearColor(0, 0, 0, 1)
-	gl.Clear(gl.COLOR_BUFFER_BIT)
+	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+	gl.Color4f(1, 0, 0, 1)
+
+	gl.Begin(gl.TRIANGLES)
+	gl.Vertex3f(0, 1, 0)
+	gl.Vertex3f(-1, -1, 0)
+	gl.Vertex3f(1, -1, 0)
+	gl.End()
 }
