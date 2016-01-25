@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.1/glfw"
 	"runtime"
 )
@@ -26,8 +27,17 @@ func main() {
 
 	window.MakeContextCurrent()
 
+	if err := gl.Init(); err != nil {
+		panic(err)
+	}
+
 	for !window.ShouldClose() {
 		window.SwapBuffers()
 		glfw.PollEvents()
 	}
+}
+
+func render() {
+	gl.ClearColor(0, 0, 0, 1)
+	gl.Clear(gl.COLOR_BUFFER_BIT)
 }
