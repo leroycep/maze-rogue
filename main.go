@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/geemili/maze-rogue/model"
 	"github.com/geemili/maze-rogue/view"
 	"github.com/go-gl/gl/v2.1/gl"
@@ -19,8 +18,6 @@ var (
 )
 
 func main() {
-	fmt.Println("Hello, world!")
-
 	err := glfw.Init()
 	if err != nil {
 		panic(err)
