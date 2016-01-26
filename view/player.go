@@ -12,9 +12,11 @@ func RenderPlayer(player *model.Player) {
 	gl.Color4f(0.5, 0, 0.5, 1)
 
 	gl.Begin(gl.TRIANGLES)
+	// Left Triangle
 	gl.Vertex3f(0, 0, 0)
 	gl.Vertex3f(0, 1, 0)
 	gl.Vertex3f(1, 0, 0)
+	// Right Triangle
 	gl.Vertex3f(1, 1, 0)
 	gl.Vertex3f(1, 0, 0)
 	gl.Vertex3f(0, 1, 0)

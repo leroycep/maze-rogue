@@ -15,6 +15,7 @@ func init() {
 var (
 	player *model.Player
 	window *glfw.Window
+	room   *model.Room
 )
 
 func main() {
@@ -38,6 +39,7 @@ func main() {
 	window.SetKeyCallback(onKey)
 
 	player = &model.Player{3, 1, 1}
+	room = &model.Room{5, 5, 6, 4}
 
 	gl.Ortho(0, 40, 0, 30, -1, 3)
 
@@ -53,6 +55,7 @@ func render() {
 	gl.ClearColor(0, 0, 0, 1)
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
+	view.RenderRoom(room)
 	view.RenderPlayer(player)
 }
 
