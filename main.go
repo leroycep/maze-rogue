@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/geemili/maze-rogue/contexts"
+	"github.com/geemili/maze-rogue/context"
 	"github.com/geemili/maze-rogue/model"
 	"github.com/geemili/maze-rogue/view"
 	"github.com/go-gl/gl/v2.1/gl"
@@ -67,13 +67,13 @@ func onKey(window *glfw.Window, k glfw.Key, s int, action glfw.Action, mods glfw
 
 	switch k {
 	case glfw.KeyLeft:
-		contexts.MovePlayer(player, []*model.Room{room}, -1, 0)
+		context.MovePlayer(player, []*model.Room{room}, -1, 0)
 	case glfw.KeyRight:
-		contexts.MovePlayer(player, []*model.Room{room}, 1, 0)
+		context.MovePlayer(player, []*model.Room{room}, 1, 0)
 	case glfw.KeyUp:
-		contexts.MovePlayer(player, []*model.Room{room}, 0, 1)
+		context.MovePlayer(player, []*model.Room{room}, 0, 1)
 	case glfw.KeyDown:
-		contexts.MovePlayer(player, []*model.Room{room}, 0, -1)
+		context.MovePlayer(player, []*model.Room{room}, 0, -1)
 	case glfw.KeyEscape:
 		window.SetShouldClose(true)
 	}
