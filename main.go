@@ -16,7 +16,7 @@ func init() {
 var (
 	player *model.Player
 	window *glfw.Window
-	room   *model.Room
+	rooms  []*model.Area
 )
 
 func main() {
@@ -40,7 +40,11 @@ func main() {
 	window.SetKeyCallback(onKey)
 
 	player = &model.Player{3, 6, 6}
-	room = &model.Room{5, 5, 6, 4}
+	rooms = []*model.Area{
+		&model.Area{5, 5, 6, 4},
+		&model.Area{11, 6, 3, 1},
+		&model.Area{14, 3, 5, 9},
+	}
 
 	gl.Ortho(0, 40, 0, 30, -1, 3)
 
@@ -56,7 +60,9 @@ func render() {
 	gl.ClearColor(0, 0, 0, 1)
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-	view.RenderRoom(room)
+	for _, room := range rooms {
+		view.RenderRoom(room)
+	}
 	view.RenderPlayer(player)
 }
 
@@ -67,13 +73,13 @@ func onKey(window *glfw.Window, k glfw.Key, s int, action glfw.Action, mods glfw
 
 	switch k {
 	case glfw.KeyLeft:
-		context.MovePlayer(player, []*model.Room{room}, -1, 0)
+		context.MovePlayer(player, rooms, -1, 0)
 	case glfw.KeyRight:
-		context.MovePlayer(player, []*model.Room{room}, 1, 0)
+		context.MovePlayer(player, rooms, 1, 0)
 	case glfw.KeyUp:
-		context.MovePlayer(player, []*model.Room{room}, 0, 1)
+		context.MovePlayer(player, rooms, 0, 1)
 	case glfw.KeyDown:
-		context.MovePlayer(player, []*model.Room{room}, 0, -1)
+		context.MovePlayer(player, rooms, 0, -1)
 	case glfw.KeyEscape:
 		window.SetShouldClose(true)
 	}
