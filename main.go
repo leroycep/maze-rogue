@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/geemili/maze-rogue/contexts"
 	"github.com/geemili/maze-rogue/model"
 	"github.com/geemili/maze-rogue/view"
 	"github.com/go-gl/gl/v2.1/gl"
@@ -38,7 +39,7 @@ func main() {
 
 	window.SetKeyCallback(onKey)
 
-	player = &model.Player{3, 1, 1}
+	player = &model.Player{3, 6, 6}
 	room = &model.Room{5, 5, 6, 4}
 
 	gl.Ortho(0, 40, 0, 30, -1, 3)
@@ -66,13 +67,13 @@ func onKey(window *glfw.Window, k glfw.Key, s int, action glfw.Action, mods glfw
 
 	switch k {
 	case glfw.KeyLeft:
-		player.X -= 1
+		contexts.MovePlayer(player, []*model.Room{room}, -1, 0)
 	case glfw.KeyRight:
-		player.X += 1
+		contexts.MovePlayer(player, []*model.Room{room}, 1, 0)
 	case glfw.KeyUp:
-		player.Y += 1
+		contexts.MovePlayer(player, []*model.Room{room}, 0, 1)
 	case glfw.KeyDown:
-		player.Y -= 1
+		contexts.MovePlayer(player, []*model.Room{room}, 0, -1)
 	case glfw.KeyEscape:
 		window.SetShouldClose(true)
 	}
