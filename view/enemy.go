@@ -5,11 +5,11 @@ import (
 	"github.com/go-gl/gl/v2.1/gl"
 )
 
-func RenderPlayer(player *model.Beast) {
+func RenderEnemy(enemy *model.Beast) {
 	gl.PushMatrix()
-	gl.Translatef(float32(player.X), float32(player.Y), 0)
+	gl.Translatef(float32(enemy.X), float32(enemy.Y), 0)
 
-	gl.Color4f(0.5, 0, 0.5, 1)
+	gl.Color4f(1, 0.1, 0.1, 1)
 
 	gl.Begin(gl.TRIANGLES)
 	// Left Triangle

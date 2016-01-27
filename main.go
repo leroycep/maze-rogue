@@ -14,9 +14,10 @@ func init() {
 }
 
 var (
-	player *model.Player
-	window *glfw.Window
-	rooms  []*model.Area
+	player  *model.Beast
+	window  *glfw.Window
+	rooms   []*model.Area
+	enemies []*model.Beast
 )
 
 func main() {
@@ -39,11 +40,16 @@ func main() {
 
 	window.SetKeyCallback(onKey)
 
-	player = &model.Player{3, 6, 6}
+	player = &model.Beast{3, 6, 6}
 	rooms = []*model.Area{
 		&model.Area{5, 5, 6, 4},
 		&model.Area{11, 6, 3, 1},
 		&model.Area{14, 3, 5, 9},
+	}
+	enemies = []*model.Beast{
+		&model.Beast{1, 15, 4},
+		&model.Beast{1, 15, 7},
+		&model.Beast{1, 17, 9},
 	}
 
 	gl.Ortho(0, 40, 0, 30, -1, 3)
@@ -62,6 +68,9 @@ func render() {
 
 	for _, room := range rooms {
 		view.RenderRoom(room)
+	}
+	for _, enemy := range enemies {
+		view.RenderEnemy(enemy)
 	}
 	view.RenderPlayer(player)
 }
