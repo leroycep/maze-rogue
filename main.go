@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/geemili/maze-rogue/context"
+	"github.com/geemili/maze-rogue/context/move_player"
 	"github.com/geemili/maze-rogue/model"
 	"github.com/geemili/maze-rogue/view"
 	"github.com/go-gl/gl/v2.1/gl"
@@ -71,19 +71,19 @@ func onKey(window *glfw.Window, k glfw.Key, s int, action glfw.Action, mods glfw
 		return
 	}
 
-	roomList := make([]context.Room, len(rooms))
+	roomList := make([]move_player.Room, len(rooms))
 	for idx, room := range rooms {
 		roomList[idx] = room
 	}
 	switch k {
 	case glfw.KeyLeft:
-		context.MovePlayer(player, roomList, -1, 0)
+		move_player.MovePlayer(player, roomList, -1, 0)
 	case glfw.KeyRight:
-		context.MovePlayer(player, roomList, 1, 0)
+		move_player.MovePlayer(player, roomList, 1, 0)
 	case glfw.KeyUp:
-		context.MovePlayer(player, roomList, 0, 1)
+		move_player.MovePlayer(player, roomList, 0, 1)
 	case glfw.KeyDown:
-		context.MovePlayer(player, roomList, 0, -1)
+		move_player.MovePlayer(player, roomList, 0, -1)
 	case glfw.KeyEscape:
 		window.SetShouldClose(true)
 	}
