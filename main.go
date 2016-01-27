@@ -71,15 +71,19 @@ func onKey(window *glfw.Window, k glfw.Key, s int, action glfw.Action, mods glfw
 		return
 	}
 
+	roomList := make([]context.Room, len(rooms))
+	for idx, room := range rooms {
+		roomList[idx] = room
+	}
 	switch k {
 	case glfw.KeyLeft:
-		context.MovePlayer(player, rooms, -1, 0)
+		context.MovePlayer(player, roomList, -1, 0)
 	case glfw.KeyRight:
-		context.MovePlayer(player, rooms, 1, 0)
+		context.MovePlayer(player, roomList, 1, 0)
 	case glfw.KeyUp:
-		context.MovePlayer(player, rooms, 0, 1)
+		context.MovePlayer(player, roomList, 0, 1)
 	case glfw.KeyDown:
-		context.MovePlayer(player, rooms, 0, -1)
+		context.MovePlayer(player, roomList, 0, -1)
 	case glfw.KeyEscape:
 		window.SetShouldClose(true)
 	}
