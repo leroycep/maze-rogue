@@ -14,12 +14,16 @@ type GameData struct {
 var game GameData
 
 func Init() {
-	width, height, regionid := 40, 30, 1
+	width, height, regionid := 80, 60, 1
+
+	gl.Ortho(0, float64(width), 0, float64(height), -1, 3)
+
 	rooms := generate.PlaceRooms(width, height, 100, 4, 8)                     // Place rooms between 3x3 and 5x5 in a 40 x 30 grid of tiles
 	bakedRooms, regionid := generate.BakeRooms(rooms, width, height, regionid) // Render rooms down to a grid
 	maze, regionid := generate.MakeMazes(bakedRooms, width, height, regionid)  // Finish up by generating mazes between rooms
 	connect, regionid := generate.ConnectRooms(maze, width, height, regionid)
-	game = GameData{width, height, connect}
+	trimmed := generate.TrimPaths(connect, width, height)
+	game = GameData{width, height, trimmed}
 }
 
 func Render() {

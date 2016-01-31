@@ -29,8 +29,6 @@ func main() {
 		panic(err)
 	}
 
-	gl.Ortho(0, 40, 0, 30, -1, 3)
-
 	window.SetKeyCallback(game.OnKey)
 	game.Init()
 	for !window.ShouldClose() {
