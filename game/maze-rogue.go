@@ -3,27 +3,45 @@ package game
 import (
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.1/glfw"
+	"time"
 )
 
 type Tile struct {
-	X, Y int
+	X, Y, Type int
 }
 
-var squares []Tile
+var (
+	squares []Tile
+	tick    chan bool
+)
 
 func Init() {
 	squares = []Tile{
-		Tile{5, 5},
-		Tile{5, 6},
-		Tile{6, 5},
-		Tile{6, 6},
-		Tile{9, 10},
+		Tile{9, 5, 0},
 	}
+	tick = make(chan bool)
+	go func() {
+		for {
+			tick <- true
+			time.Sleep(1 * time.Second)
+		}
+	}()
 }
 
 func Render() {
 	gl.ClearColor(0, 0, 0, 1)
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+	select {
+	case <-tick:
+		for _, square := range squares {
+			if square.Type == 0 {
+				square.Type = 1
+				newSquare := Tile{square.X, square.Y + 1, 0}
+				squares = append(squares, newSquare)
+			}
+		}
+	}
 
 	for _, square := range squares {
 		gl.PushMatrix()
