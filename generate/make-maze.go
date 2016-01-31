@@ -2,7 +2,7 @@ package generate
 
 import "math/rand"
 
-func MakeMazes(bakedRooms []int, width, height int) []int {
+func MakeMazes(bakedRooms []int, width, height, regionid int) ([]int, int) {
 	maze := make([]int, width*height)
 	for idx, value := range bakedRooms {
 		maze[idx] = value
@@ -20,10 +20,11 @@ func MakeMazes(bakedRooms []int, width, height int) []int {
 				}
 			}
 			// There is a place to start the maze!
-			maze = digMaze(i, j, maze, width, height)
+			maze = digMaze(i, j, maze, width, height, regionid)
+			regionid++
 		}
 	}
-	return maze
+	return maze, regionid
 }
 
 func isOccupied(x, y, gridWidth, gridHeight int, grid []int) bool {
@@ -37,7 +38,7 @@ type vector struct {
 	x, y int
 }
 
-func digMaze(x, y int, maze []int, width, height int) []int {
+func digMaze(x, y int, maze []int, width, height, regionid int) []int {
 	mymaze := make([]int, len(maze))
 	for idx, t := range maze {
 		mymaze[idx] = t
@@ -53,9 +54,9 @@ DirLoop:
 			// Oh, not a valid place to start a maze
 			continue DirLoop
 		}
-		mymaze[((y+dir.y)*width)+x+dir.x] = 2
-		mymaze[((y+dir.y/2)*width)+x+dir.x/2] = 2
-		mymaze = digMaze(x+dir.x, y+dir.y, mymaze, width, height)
+		mymaze[((y+dir.y)*width)+x+dir.x] = regionid
+		mymaze[((y+dir.y/2)*width)+x+dir.x/2] = regionid
+		mymaze = digMaze(x+dir.x, y+dir.y, mymaze, width, height, regionid)
 	}
 	return mymaze
 }
