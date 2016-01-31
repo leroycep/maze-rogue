@@ -9,10 +9,10 @@ type Room struct {
 func PlaceRooms(width, height, number, minSize, maxSize int) []Room {
 	rooms := []Room{}
 	for i := 0; i < number; i++ {
-		rw := rand.Intn(maxSize-minSize) + minSize
-		rh := rand.Intn(maxSize-minSize) + minSize
-		x := rand.Intn(width - rw)
-		y := rand.Intn(height - rh)
+		rw := (rand.Intn((maxSize-minSize)/2) + (minSize / 2)) * 2
+		rh := (rand.Intn((maxSize-minSize)/2) + (minSize / 2)) * 2
+		x := rand.Intn((width-rw)/2) * 2
+		y := rand.Intn((height-rh)/2) * 2
 		room := Room{x, y, rw, rh}
 		canPlace := true
 		for _, oroom := range rooms {

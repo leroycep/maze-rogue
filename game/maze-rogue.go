@@ -14,7 +14,7 @@ type GameData struct {
 var game GameData
 
 func Init() {
-	rooms := generate.PlaceRooms(40, 30, 100, 3, 7) // Place rooms between 3x3 and 5x5 in a 40 x 30 grid of tiles
+	rooms := generate.PlaceRooms(40, 30, 100, 4, 8) // Place rooms between 3x3 and 5x5 in a 40 x 30 grid of tiles
 	bakedRooms := generate.BakeRooms(rooms, 40, 30) // Render rooms down to a grid
 	maze := generate.MakeMazes(bakedRooms, 40, 30)  // Finish up by generating mazes between rooms
 	game = GameData{40, 30, maze}

@@ -47,10 +47,11 @@ func digMaze(x, y int, maze []int, width, height int) []int {
 		n := rand.Intn(len(directions))
 		directions[i], directions[n] = directions[n], directions[i]
 	}
+DirLoop:
 	for _, dir := range directions {
 		if x+dir.x < 0 || x+dir.x >= width || y+dir.y < 0 || y+dir.y >= height || isOccupied(x+dir.x, y+dir.y, width, height, mymaze) {
 			// Oh, not a valid place to start a maze
-			continue
+			continue DirLoop
 		}
 		mymaze[((y+dir.y)*width)+x+dir.x] = 1
 		mymaze[((y+dir.y/2)*width)+x+dir.x/2] = 1
