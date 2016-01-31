@@ -53,8 +53,8 @@ DirLoop:
 			// Oh, not a valid place to start a maze
 			continue DirLoop
 		}
-		mymaze[((y+dir.y)*width)+x+dir.x] = 1
-		mymaze[((y+dir.y/2)*width)+x+dir.x/2] = 1
+		mymaze[((y+dir.y)*width)+x+dir.x] = 2
+		mymaze[((y+dir.y/2)*width)+x+dir.x/2] = 2
 		mymaze = digMaze(x+dir.x, y+dir.y, mymaze, width, height)
 	}
 	return mymaze

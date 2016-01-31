@@ -39,6 +39,15 @@ func Render() {
 				gl.Vertex3f(float32(i+1), float32(j+1), 0)
 				gl.Vertex3f(float32(i+1), float32(j), 0)
 				gl.Vertex3f(float32(i), float32(j+1), 0)
+			case 2:
+				// Left Triangle
+				gl.Vertex3f(float32(i)+0.1, float32(j)+0.1, 0)
+				gl.Vertex3f(float32(i)+0.1, float32(j)+0.9, 0)
+				gl.Vertex3f(float32(i)+0.9, float32(j)+0.9, 0)
+				// Right Triangle
+				gl.Vertex3f(float32(i)+0.9, float32(j)+0.9, 0)
+				gl.Vertex3f(float32(i)+0.9, float32(j)+0.1, 0)
+				gl.Vertex3f(float32(i)+0.1, float32(j)+0.1, 0)
 			default:
 			}
 		}
