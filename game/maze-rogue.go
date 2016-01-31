@@ -24,7 +24,17 @@ func Init() {
 	maze, regionid := generate.MakeMazes(bakedRooms, width, height, regionid)  // Finish up by generating mazes between rooms
 	connect, regionid := generate.ConnectRooms(maze, width, height, regionid)
 	trimmed := generate.TrimPaths(connect, width, height)
-	game = GameData{width, height, trimmed, 0, 0}
+	x, y := 0, 0
+LOOP:
+	for i := 0; i < width; i++ {
+		for j := 0; j < height; j++ {
+			if trimmed[(j*width)+i] != 0 {
+				x, y = i, j
+				break LOOP
+			}
+		}
+	}
+	game = GameData{width, height, trimmed, x, y}
 }
 
 func Render() {
@@ -83,16 +93,20 @@ func OnKey(window *glfw.Window, k glfw.Key, s int, action glfw.Action, mods glfw
 	if action != glfw.Press {
 		return
 	}
+	nx, ny := game.PlayerX, game.PlayerY
 	switch k {
 	case glfw.KeyLeft:
-		game.PlayerX--
+		nx--
 	case glfw.KeyRight:
-		game.PlayerX++
+		nx++
 	case glfw.KeyUp:
-		game.PlayerY++
+		ny++
 	case glfw.KeyDown:
-		game.PlayerY--
+		ny--
 	case glfw.KeyEscape:
 		window.SetShouldClose(true)
+	}
+	if nx >= 0 && nx < game.Width && ny >= 0 && ny < game.Height && game.Tiles[(ny*game.Width)+nx] != 0 {
+		game.PlayerX, game.PlayerY = nx, ny
 	}
 }
