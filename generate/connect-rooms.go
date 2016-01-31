@@ -36,7 +36,7 @@ func ConnectRooms(maze []int, width, height, regionid int) ([]int, int) {
 		temp := []edge{}
 		for _, value := range edges {
 			if !(unified[value.regions[0]] && unified[value.regions[1]]) {
-				if rand.Intn(100) == 0 {
+				if rand.Intn(500) == 0 {
 					connected[(value.y*width)+value.x] = regionid
 				}
 				temp = append(temp, value)
