@@ -4,12 +4,17 @@ import (
 	"github.com/geemili/maze-rogue/generate"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.1/glfw"
+	"image"
+	"image/draw"
+	_ "image/png"
+	"os"
 )
 
 type GameData struct {
 	Width, Height    int
 	Tiles            []int
 	PlayerX, PlayerY int
+	Texture          uint32
 }
 
 var game GameData
@@ -34,12 +39,16 @@ LOOP:
 			}
 		}
 	}
-	game = GameData{width, height, trimmed, x, y}
+	texture := newTexture("assets/terminal.png")
+	game = GameData{width, height, trimmed, x, y, texture}
 }
 
 func Render() {
 	gl.ClearColor(0, 0, 0, 1)
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+	gl.Color4f(1, 1, 1, 1)
+	gl.BindTexture(gl.TEXTURE_2D, game.Texture)
 
 	gl.PushMatrix()
 	gl.Translatef(20-float32(game.PlayerX), 15-float32(game.PlayerY), 0)
@@ -47,43 +56,43 @@ func Render() {
 	for i := 0; i < game.Width; i++ {
 	LOOP:
 		for j := 0; j < game.Height; j++ {
+			var tx, ty, w, h float32 = 0, 0, 0.0625, 0.0625
 			switch game.Tiles[(j*game.Width)+i] {
 			case 0:
 				continue LOOP
-			case -1:
-				gl.Color4f(1, 1, 1, 1)
-			case 1:
-				gl.Color4f(0.3, 0.4, 0.5, 1)
-			case 2:
-				gl.Color4f(0.7, 0.4, 0.3, 1)
-			case 3:
-				gl.Color4f(0.2, 0.7, 0.3, 1)
-			case 4:
-				gl.Color4f(0.1, 0.3, 0.7, 1)
-			case 5:
-				gl.Color4f(0.2, 0.3, 0.6, 1)
-			case 6:
-				gl.Color4f(0.3, 0.3, 0.5, 1)
 			default:
-				gl.Color4f(0.5, 0, 0.5, 1)
+				tx, ty = 2, 14
 			}
 			// Left Triangle
+			gl.TexCoord2f(tx/16.0, ty/16.0+h)
 			gl.Vertex3f(float32(i), float32(j), 0)
+			gl.TexCoord2f(tx/16.0, ty/16.0)
 			gl.Vertex3f(float32(i), float32(j+1), 0)
+			gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
 			gl.Vertex3f(float32(i+1), float32(j), 0)
 			// Right Triangle
+			gl.TexCoord2f(tx/16.0+w, ty/16.0)
 			gl.Vertex3f(float32(i+1), float32(j+1), 0)
+			gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
 			gl.Vertex3f(float32(i+1), float32(j), 0)
+			gl.TexCoord2f(tx/16.0, ty/16.0)
 			gl.Vertex3f(float32(i), float32(j+1), 0)
 		}
 	}
 	// Player
 	gl.Color4f(1, 0, 0, 1)
+	var tx, ty, w, h float32 = 4, 0, 0.0625, 0.0625
+	gl.TexCoord2f(tx/16.0, ty/16.0+h)
 	gl.Vertex3f(float32(game.PlayerX), float32(game.PlayerY), 0)
+	gl.TexCoord2f(tx/16.0, ty/16.0)
 	gl.Vertex3f(float32(game.PlayerX), float32(game.PlayerY+1), 0)
+	gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
 	gl.Vertex3f(float32(game.PlayerX+1), float32(game.PlayerY), 0)
+	gl.TexCoord2f(tx/16.0+w, ty/16.0)
 	gl.Vertex3f(float32(game.PlayerX+1), float32(game.PlayerY+1), 0)
+	gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
 	gl.Vertex3f(float32(game.PlayerX+1), float32(game.PlayerY), 0)
+	gl.TexCoord2f(tx/16.0, ty/16.0)
 	gl.Vertex3f(float32(game.PlayerX), float32(game.PlayerY+1), 0)
 	gl.End()
 	gl.PopMatrix()
@@ -109,4 +118,42 @@ func OnKey(window *glfw.Window, k glfw.Key, s int, action glfw.Action, mods glfw
 	if nx >= 0 && nx < game.Width && ny >= 0 && ny < game.Height && game.Tiles[(ny*game.Width)+nx] != 0 {
 		game.PlayerX, game.PlayerY = nx, ny
 	}
+}
+
+func newTexture(file string) uint32 {
+	imgFile, err := os.Open(file)
+	if err != nil {
+		panic(err)
+	}
+	img, _, err := image.Decode(imgFile)
+	if err != nil {
+		panic(err)
+	}
+
+	rgba := image.NewRGBA(img.Bounds())
+	if rgba.Stride != rgba.Rect.Size().X*4 {
+		panic("unsupported stride")
+	}
+	draw.Draw(rgba, rgba.Bounds(), img, image.Point{0, 0}, draw.Src)
+
+	var texture uint32
+	gl.Enable(gl.TEXTURE_2D)
+	gl.GenTextures(1, &texture)
+	gl.BindTexture(gl.TEXTURE_2D, texture)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+	gl.TexImage2D(
+		gl.TEXTURE_2D,
+		0,
+		gl.RGBA,
+		int32(rgba.Rect.Size().X),
+		int32(rgba.Rect.Size().Y),
+		0,
+		gl.RGBA,
+		gl.UNSIGNED_BYTE,
+		gl.Ptr(rgba.Pix))
+
+	return texture
 }
