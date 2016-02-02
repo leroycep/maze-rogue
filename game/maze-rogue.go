@@ -56,27 +56,15 @@ func Render() {
 	for i := 0; i < game.Width; i++ {
 	LOOP:
 		for j := 0; j < game.Height; j++ {
-			var tx, ty, w, h float32 = 0, 0, 0.0625, 0.0625
+			id := 0
 			switch game.Tiles[(j*game.Width)+i] {
 			case 0:
+				// Do nothing
 				continue LOOP
 			default:
-				tx, ty = 2, 14
+				id = 226
 			}
-			// Left Triangle
-			gl.TexCoord2f(tx/16.0, ty/16.0+h)
-			gl.Vertex3f(float32(i), float32(j), 0)
-			gl.TexCoord2f(tx/16.0, ty/16.0)
-			gl.Vertex3f(float32(i), float32(j+1), 0)
-			gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
-			gl.Vertex3f(float32(i+1), float32(j), 0)
-			// Right Triangle
-			gl.TexCoord2f(tx/16.0+w, ty/16.0)
-			gl.Vertex3f(float32(i+1), float32(j+1), 0)
-			gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
-			gl.Vertex3f(float32(i+1), float32(j), 0)
-			gl.TexCoord2f(tx/16.0, ty/16.0)
-			gl.Vertex3f(float32(i), float32(j+1), 0)
+			renderTile(id, float32(i), float32(j))
 		}
 	}
 	// Player
