@@ -39,8 +39,9 @@ LOOP:
 			}
 		}
 	}
+	baked := generate.BakeForTileset(trimmed, width, height)
 	texture := newTexture("assets/terminal.png")
-	game = GameData{width, height, trimmed, x, y, texture}
+	game = GameData{width, height, baked, x, y, texture}
 }
 
 func Render() {
@@ -54,17 +55,8 @@ func Render() {
 	gl.Translatef(20-float32(game.PlayerX), 15-float32(game.PlayerY), 0)
 	gl.Begin(gl.TRIANGLES)
 	for i := 0; i < game.Width; i++ {
-	LOOP:
 		for j := 0; j < game.Height; j++ {
-			id := 0
-			switch game.Tiles[(j*game.Width)+i] {
-			case 0:
-				// Do nothing
-				continue LOOP
-			default:
-				id = 226
-			}
-			renderTile(id, float32(i), float32(j))
+			renderTile(game.Tiles[(j*game.Width)+i], float32(i), float32(j))
 		}
 	}
 	// Player
@@ -91,7 +83,7 @@ func OnKey(window *glfw.Window, k glfw.Key, s int, action glfw.Action, mods glfw
 	case glfw.KeyEscape:
 		window.SetShouldClose(true)
 	}
-	if nx >= 0 && nx < game.Width && ny >= 0 && ny < game.Height && game.Tiles[(ny*game.Width)+nx] != 0 {
+	if nx >= 0 && nx < game.Width && ny >= 0 && ny < game.Height && game.Tiles[(ny*game.Width)+nx] == 226 {
 		game.PlayerX, game.PlayerY = nx, ny
 	}
 }
