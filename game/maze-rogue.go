@@ -81,19 +81,7 @@ func Render() {
 	}
 	// Player
 	gl.Color4f(1, 0, 0, 1)
-	var tx, ty, w, h float32 = 4, 0, 0.0625, 0.0625
-	gl.TexCoord2f(tx/16.0, ty/16.0+h)
-	gl.Vertex3f(float32(game.PlayerX), float32(game.PlayerY), 0)
-	gl.TexCoord2f(tx/16.0, ty/16.0)
-	gl.Vertex3f(float32(game.PlayerX), float32(game.PlayerY+1), 0)
-	gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
-	gl.Vertex3f(float32(game.PlayerX+1), float32(game.PlayerY), 0)
-	gl.TexCoord2f(tx/16.0+w, ty/16.0)
-	gl.Vertex3f(float32(game.PlayerX+1), float32(game.PlayerY+1), 0)
-	gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
-	gl.Vertex3f(float32(game.PlayerX+1), float32(game.PlayerY), 0)
-	gl.TexCoord2f(tx/16.0, ty/16.0)
-	gl.Vertex3f(float32(game.PlayerX), float32(game.PlayerY+1), 0)
+	renderTile(4, float32(game.PlayerX), float32(game.PlayerY))
 	gl.End()
 	gl.PopMatrix()
 }
@@ -156,4 +144,24 @@ func newTexture(file string) uint32 {
 		gl.Ptr(rgba.Pix))
 
 	return texture
+}
+
+func renderTile(id int, x, y float32) {
+	var tx, ty, w, h float32 = 0, 0, 0.0625, 0.0625
+	tilex := id % 16
+	tiley := (id - tilex) / 16
+	tx = float32(tilex)
+	ty = float32(tiley)
+	gl.TexCoord2f(tx/16.0, ty/16.0+h)
+	gl.Vertex3f(x, y, 0)
+	gl.TexCoord2f(tx/16.0, ty/16.0)
+	gl.Vertex3f(x, y+1, 0)
+	gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
+	gl.Vertex3f(x+1, y, 0)
+	gl.TexCoord2f(tx/16.0+w, ty/16.0)
+	gl.Vertex3f(x+1, y+1, 0)
+	gl.TexCoord2f(tx/16.0+w, ty/16.0+h)
+	gl.Vertex3f(x+1, y, 0)
+	gl.TexCoord2f(tx/16.0, ty/16.0)
+	gl.Vertex3f(x, y+1, 0)
 }
