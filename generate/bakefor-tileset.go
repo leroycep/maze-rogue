@@ -3,6 +3,7 @@ package generate
 const (
 	hwall         = 76
 	vwall         = 59
+	hDownT        = 44
 	period        = 226
 	leftDownElbow = 251
 	leftUpElbow   = 157
@@ -14,6 +15,13 @@ func BakeForTileset(tiles []int, w, h int) []int {
 	for i := 0; i < w; i++ {
 		for j := 0; j < h; j++ {
 			switch {
+			case getTile(i, j, tiles, w, h) == 0 &&
+				getTile(i-1, j, tiles, w, h) == 0 &&
+				getTile(i+1, j, tiles, w, h) == 0 &&
+				getTile(i, j-1, tiles, w, h) == 0 &&
+				(getTile(i-1, j-1, tiles, w, h) != 0 ||
+					getTile(i+1, j-1, tiles, w, h) != 0):
+				baked[(j*w)+i] = hDownT
 			case getTile(i, j, tiles, w, h) == 0 &&
 				getTile(i-1, j, tiles, w, h) == 0 &&
 				getTile(i, j-1, tiles, w, h) == 0 &&
